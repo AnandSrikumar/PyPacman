@@ -2,15 +2,19 @@ import pygame
 from src.game_state.state_variables import State
 from src.game_state.events import EventHandler
 from src.gui.screens.screen_factory import ScreenFactory
+from src.logger import Logger
 
 # Initialize Pygame
 class Game:
     def __init__(self):
         self.state = State()
         self.events = EventHandler(self.state)
+        self.logger = Logger.get_instance()
 
     def load_pygame_screen(self):
         pygame.init()
+        self.logger.log("*"*15+"RUN"+"*"*15)
+        self.logger.log("Initiated the screen")
         self.info = pygame.display.Info()
         self.screen_width, self.screen_height = self.info.current_w, self.info.current_h
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.FULLSCREEN)

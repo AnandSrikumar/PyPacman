@@ -50,7 +50,7 @@ class MainMenu:
         self.mouse_pressed = pygame.mouse.get_pressed()
         if button.rect.collidepoint(mouse_pos):
             self.selected_button = idx
-        button.hover_check(mouse_pos)
+        button.hover_check()
         button.render_button()
         button.render_text_in_button()
         self.button_click_check(button, callback)

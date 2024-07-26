@@ -1,19 +1,7 @@
 import pygame
 from src.gui.components.fonts import Fonts, FontSingleton
-"""
-1) rect
-2) line_width
-3) fill: true or fals
-4) line color, fill color
-5) text
-6) text placement
-7) text color
-8) image: none or image path
-9) image coords
-10) Hover color
-11) callback
-12) click action
-"""
+from src.configs.colors import Colors
+
 class Button:
     def __init__(self, 
                  rect=None,
@@ -70,11 +58,11 @@ class Button:
         # Render the text on the button
         self.screen.blit(font_obj, font_rect)
 
-    def hover_check(self, mouse_pos):
+    def hover_check(self):
         if self.selected:
-            self.text_color = (255, 105, 180)
+            self.text_color = Colors.PINK.value
         else:
-            self.text_color = (255, 255, 255)
+            self.text_color = Colors.WHITE.value
 
     def is_clicked(self, mouse_pos, mouse_left_clicked, enter_clicked):
         if self.rect.collidepoint(mouse_pos) and mouse_left_clicked:
@@ -165,10 +153,10 @@ class ButtonDirector:
         button = (self.builder
                   .set_rect(self.rect)
                   .set_line_width(-1)  # Borderless button
-                  .set_line_color((255, 255, 255))  # White line color
+                  .set_line_color(Colors.WHITE.value)  # White line color
                   .set_text(self.text)
-                  .set_text_color((255, 255, 255))  # White text color
-                  .set_hover_color((255, 192, 203))  # Pink hover color
+                  .set_text_color(Colors.WHITE.value)  # White text color
+                  .set_hover_color(Colors.PINK.value)  # Pink hover color
                   .set_font(Fonts.GUI)
                   .set_font_size(self.font_size)
                   .set_callback(None)  # No callback for this example
