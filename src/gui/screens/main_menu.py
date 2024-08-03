@@ -68,7 +68,9 @@ class MainMenu:
     
     def render_highscores(self):
         def callback_highscore():
+            print("highscores screen initialized")
             self.state.game_screen = GameScreen.HIGHSCORES
+            self.hover_unselected()
 
         button = self.render_items('HIGHSCORES', 0.53, 1, callback_highscore)
 
@@ -86,7 +88,13 @@ class MainMenu:
     def hover_selected(self):
         for b in self.buttons_list:
             b.selected = False
-        self.buttons_list[self.selected_button].selected=True
+        if self.selected_button is not None:
+            self.buttons_list[self.selected_button].selected=True
+
+    def hover_unselected(self):
+        for b in self.buttons_list:
+            b.selected = False
+        self.selected_button = None
     
     def check_scroll_down(self):
         if self.state.down_pressed:

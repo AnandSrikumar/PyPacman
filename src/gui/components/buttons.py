@@ -162,3 +162,17 @@ class ButtonDirector:
                   .set_callback(None)  # No callback for this example
                   .build())
         return button
+    
+    def create_gui_filled_button(self):
+        button = (self.builder
+                  .set_rect(self.rect)
+                  .set_line_width(0)  # Borderless button
+                  .set_line_color(Colors.WHITE.value)  # White line color
+                  .set_text(self.text)
+                  .set_text_color(Colors.BLACK.value)  # White text color
+                  .set_hover_color(Colors.PINK.value)  # Pink hover color
+                  .set_font(Fonts.GUI)
+                  .set_font_size(self.font_size)
+                  .set_callback(None)  # No callback for this example
+                  .build())
+        return button
