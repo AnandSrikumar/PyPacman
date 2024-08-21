@@ -32,10 +32,11 @@ class Logger:
         self.logger.addHandler(console_handler)
     
     def log(self, message):
-        frame = inspect.currentframe().f_back
-        class_name = frame.f_locals.get('self', None).__class__.__name__ if frame.f_locals.get('self', None) else 'UnknownClass'
-        function_name = frame.f_code.co_name
-        self.logger.debug(message, extra={'class': class_name, 'function': function_name})
+        pass
+        # frame = inspect.currentframe().f_back
+        # class_name = frame.f_locals.get('self', None).__class__.__name__ if frame.f_locals.get('self', None) else 'UnknownClass'
+        # function_name = frame.f_code.co_name
+        # self.logger.debug(message, extra={'class': class_name, 'function': function_name})
 
     @staticmethod
     def get_instance():
