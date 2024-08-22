@@ -11,7 +11,7 @@ class BaseSprite(pygame.sprite.Sprite):
         self.image.blit(self.images[0], (0, 0))  # Draw the first image on the surface
         self.rect = self.image.get_rect(topleft=pos)
         self.current_frame = 0
-        self.animation_speed = 0.1
+        self.animation_speed = 0.05
 
     def load_image(self, path):
         image = pygame.image.load(path).convert_alpha()

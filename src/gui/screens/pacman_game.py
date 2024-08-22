@@ -55,8 +55,8 @@ class Pacman:
                                                             screen_x,
                                                             screen_y)
         self.pacman = PacmanSprite(pos=start_pos, 
-                                   width=height*2, 
-                                   height=height*2,
+                                   width=height*1.5, 
+                                   height=height*1.5,
                                    images=pacman_list)
         print(f"pacman drawn at {start_pos} with width: {width}, height: {height}")
         print(f"actual screen dims {screen_dims}")
