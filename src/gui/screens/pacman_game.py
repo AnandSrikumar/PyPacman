@@ -68,22 +68,22 @@ class Pacman:
                 if col != 0:
                     col.render(self.screen)
 
-    def draw_matrix(self):
-        matrix = self.level_manager.get_level_data()['matrix']
-        cell_dims = self.level_manager.get_cell_size()
-        screen_dims = self.level_manager.get_screen_rect()
-        x, y, w, h = screen_dims
-        for idx, row in enumerate(matrix):
-            x = screen_dims[0]
-            for idx2, col in enumerate(row):
-                if col != 0:
-                    col.render(self.screen)
-                pygame.draw.rect(self.screen,
-                                 (255, 0, 0),
-                                 (x, y, cell_dims[0], cell_dims[1]),
-                                 1)
-                x += cell_dims[0]
-            y += cell_dims[1]
+    # def draw_matrix(self):
+    #     matrix = self.level_manager.get_level_data()['matrix']
+    #     cell_dims = self.level_manager.get_cell_size()
+    #     screen_dims = self.level_manager.get_screen_rect()
+    #     x, y, w, h = screen_dims
+    #     for idx, row in enumerate(matrix):
+    #         x = screen_dims[0]
+    #         for idx2, col in enumerate(row):
+    #             if col != 0:
+    #                 col.render(self.screen)
+    #             pygame.draw.rect(self.screen,
+    #                              (255, 0, 0),
+    #                              (x, y, cell_dims[0], cell_dims[1]),
+    #                              1)
+    #             x += cell_dims[0]
+    #         y += cell_dims[1]
 
     def sprites_blitter(self):
         self.pacman.update()
