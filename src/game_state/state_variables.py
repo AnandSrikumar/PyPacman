@@ -6,6 +6,7 @@ class State:
         self.__down_pressed: bool = False
         self.__up_pressed: bool = False
         self.__enter_clicked: bool = False
+        self.__level = 1
 
     @property
     def running(self):
@@ -48,3 +49,11 @@ class State:
     @enter.setter
     def enter(self, val):
         self.__enter_clicked = val
+
+    @property
+    def level(self):
+        return self.__level
+    
+    @level.setter
+    def level(self, new_level):
+        self.__level = new_level

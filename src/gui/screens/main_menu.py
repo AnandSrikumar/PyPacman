@@ -61,16 +61,18 @@ class MainMenu:
                              self.mouse_pressed[0],
                              self.state.enter):
             if callback:
+                self.hover_unselected()
                 callback()
 
     def render_start(self):
-        button = self.render_items("START", 0.48, 0)
+        def callback():
+            self.state.game_screen = GameScreen.GAME
+        button = self.render_items("START", 0.48, 0, callback)
     
     def render_highscores(self):
         def callback_highscore():
             print("highscores screen initialized")
             self.state.game_screen = GameScreen.HIGHSCORES
-            self.hover_unselected()
 
         button = self.render_items('HIGHSCORES', 0.53, 1, callback_highscore)
 
