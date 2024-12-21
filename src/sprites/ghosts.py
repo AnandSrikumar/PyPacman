@@ -1,9 +1,10 @@
 import time
-from concurrent.futures import ProcessPoolExecutor
+import multiprocessing
 
 from pygame.sprite import Sprite
 from pygame import image, transform, draw
 from pygame import time as pytime
+from pygame import Rect
 
 from src.configs import *
 from src.utils.coord_utils import (get_coords_from_idx, 
@@ -24,7 +25,6 @@ class Ghost(Sprite):
                  start_x: float,
                  start_y: float,
                  tiny_matrix_fast: list[list],
-                 tiny_matrix_slow: list[list],
                  screen,
                  game_state,
                  paths=None,
@@ -63,6 +63,8 @@ class Ghost(Sprite):
         self.yidx = None
         self.curr_idx = 0
         self.panic_start = pytime.get_ticks()
+        self.result_queue = multiprocessing.Queue()
+        self.process = None
     
     def images_load(self):
         def image_creation_helper(ghost_path):
@@ -163,20 +165,27 @@ class Ghost(Sprite):
             return
         if (curr_time - self.panic_start) > GHOST_NORMAL_DELAY:
             self.normal_mode()
+    
+    def check_collision(self):
+        pacman_rect = Rect(self.game_state.pacman_rect)
+        if pacman_rect.colliderect(self.rect):
+            if self.mode == 'chase':
+                self.game_state.is_pacman_dead = True
 
     def update(self):
         self.draw_ghost()
         self.animate_den()
         self.move_ghost()
         self.check_panic_end()
+        self.check_collision()
 
 class Blinky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
-                 start_y: float, tiny_matrix_fast, tiny_matrix_slow,
+                 start_y: float, tiny_matrix_fast, 
                  screen, game_state, frame_rate: int = 1):
         super().__init__("blinky", ghost_pos, start_x, start_y, 
                          tiny_matrix_fast, 
-                         tiny_matrix_slow, screen, 
+                          screen, 
                          game_state, frame_rate=frame_rate)
         self.release_delay = GHOST_DELAYS['blinky']
         self.release_time = self.release_delay + self.start_time
@@ -201,11 +210,11 @@ class Blinky(Ghost):
 
 class Inky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
-                 start_y: float, tiny_matrix_fast, tiny_matrix_slow,
+                 start_y: float, tiny_matrix_fast, 
                  screen, game_state, frame_rate: int = 10):
         super().__init__("inky", ghost_pos, start_x, start_y, 
                          tiny_matrix_fast, 
-                         tiny_matrix_slow, 
+                          
                          screen, game_state, frame_rate=frame_rate,
                         )
         self.release_delay = GHOST_DELAYS['inky']
@@ -233,11 +242,11 @@ class Inky(Ghost):
 
 class Pinky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
-                 start_y: float, tiny_matrix_fast, tiny_matrix_slow,
+                 start_y: float, tiny_matrix_fast, 
                  screen, game_state, frame_rate: int = 4):
         super().__init__("pinky", ghost_pos, start_x, start_y, 
                          tiny_matrix_fast, 
-                         tiny_matrix_slow, screen, 
+                          screen, 
                          game_state, frame_rate=frame_rate,
                          )
         self.release_delay = GHOST_DELAYS['pinky']
@@ -268,10 +277,10 @@ class Pinky(Ghost):
 
 class Clyde(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
-                 start_y: float, tiny_matrix_fast, tiny_matrix_slow,
+                 start_y: float, tiny_matrix_fast, 
                  screen, game_state, frame_rate: int = 0):
         super().__init__("clyde", ghost_pos, start_x, start_y, 
-                         tiny_matrix_fast, tiny_matrix_slow, 
+                         tiny_matrix_fast,  
                          screen, game_state, frame_rate=frame_rate,
                          )
         self.release_delay = GHOST_DELAYS['clyde']
@@ -331,7 +340,6 @@ class GhostManager:
             ghost_obj = ghost(ghost_pos, 
                                 self.start_x, self.start_y,
                                 self.matrix_5px, 
-                                self.matrix_2px, 
                                 self.screen, 
                                 self.game_state)
             self.ghosts_list.append(ghost_obj)
@@ -379,15 +387,11 @@ class GhostManager:
 
     def create_tiny_matrices(self):
         self.matrix_5px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_FAST)
-        self.matrix_2px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_SLOW)
     
     def create_movables(self):
         self.movables_5px = get_movable_locations(self.matrix_5px, 
                                                   max_cell_size=CELL_SIZE[0],
                                                   cell_size=GHOST_SPEED_FAST)
-        self.movables_2px = get_movable_locations(self.matrix_2px,
-                                                  max_cell_size=CELL_SIZE[0],
-                                                  cell_size=GHOST_SPEED_SLOW)
     
 
     def tiny_matrix_loader(self):
