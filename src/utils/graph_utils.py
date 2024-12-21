@@ -66,3 +66,9 @@ def a_star(matrix, start, target, subdivs=4):
                     closest_distance = h_dist
 
     return path_builder(closest_node, came_from)  #
+
+
+def compute_paths(matrix, start, target, result_queue):
+    from src.utils.graph_utils import a_star  # Import here to avoid process pickling issues
+    paths = a_star(matrix, start, target)
+    result_queue.put(paths)

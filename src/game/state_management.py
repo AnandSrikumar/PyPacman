@@ -9,6 +9,15 @@ class GameState:
         self.__ghost_pos = {}
         self.__is_loaded = False
         self.__is_pacman_powered = False
+        self.__is_pacman_dead = False
+
+    @property
+    def is_pacman_dead(self):
+        return self.__is_pacman_dead
+    
+    @is_pacman_dead.setter
+    def is_pacman_dead(self, val):
+        self.__is_pacman_dead = val
 
     @property
     def is_pacman_powered(self):

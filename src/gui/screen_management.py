@@ -19,7 +19,17 @@ class ScreenManager:
             self.all_sprites.add(ghost)
         logger.info("ghosts created")
 
+    def reload_level_after_death(self):
+        self.all_sprites.empty()
+        self.all_sprites.add(self.pacman.pacman)
+        for ghost in self.pacman.ghost.ghosts_list:
+            self.all_sprites.add(ghost)
+
     def draw_screens(self):
-        self.pacman.ghost.manage_ghosts()
-        self.pacman.draw_level()
+        if not self._game_state.is_pacman_dead:
+            self.pacman.ghost.manage_ghosts()
+            self.pacman.draw_level()
+            return
+        self.pacman.check_reload_level()
+        self.reload_level_after_death()
         

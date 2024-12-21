@@ -26,10 +26,13 @@ class PacmanGrid:
         self._level_number = self._game_state.level
         self.load_level(self._level_number)
         logger.info("level loaded")
+        self.load_sprites()
+        
+    def load_sprites(self):
         self.pacman = Pacman(
             PACMAN[0],
             PACMAN[1],
-            game_state,
+            self._game_state,
             self._pacman_pos,
             self.start_x,
             self.start_y,
@@ -45,7 +48,12 @@ class PacmanGrid:
                                   self._game_state,
                                   self._screen)
         logger.info("ghosts created")
-        
+
+    def check_reload_level(self):
+        if self._game_state.is_pacman_dead:
+            self.load_sprites()
+            self._game_state.is_pacman_dead = False
+
     def get_json(self, path):
         with open(path) as fp:
             payload = json.load(fp)
